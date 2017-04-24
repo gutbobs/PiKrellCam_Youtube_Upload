@@ -1,0 +1,13 @@
+[Unit]
+Description=Monitor Youtube Upload Queue
+After=multi-user.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 /opt/youtube_uploader/queue_monitor.py
+Restart=on-abort
+WorkingDirectory=/opt/youtube_uploader
+
+[Install]
+WantedBy=multi-user.target
+
