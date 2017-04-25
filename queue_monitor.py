@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 import time
 import subprocess
+import urllib.parse
 from modules import database
 from modules import load_variables
 
@@ -51,7 +52,10 @@ class main:
 			else:
 				print ("upload failed")
 				print (cmd_result)
-			sql_cmd = "UPDATE VideoData set UPLOADRESULT='{cmd_res}' where INDEX='{index}';".format(cmd_res=cmd_result[0],index=item['INDEX'])
+			sql_cmd = "UPDATE `VideoData` set `UPLOADRESULT`='{cmd_res}',`UPLOADED`='1' where `INDEX`='{index}' ;".format(cmd_res=urllib.parse.quote_plus(cmd_result[0]),index=item['INDEX'])
+			print (sql_cmd)
+			self.DB.Update(sql_cmd)
+
 		
 		
 		
