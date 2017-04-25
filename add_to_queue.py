@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 import sys
+import os
 from modules import database
 from modules import load_variables
 
@@ -36,7 +37,20 @@ class main:
 
 if __name__ == "__main__":
 	print ("Loading Variables")
+	upload_filename = sys.argv[1]
 	variables = load_variables.load_variables(r'/opt/youtube_uploader/etc/queue_monitor.ini')
+
+
+	#check file size before continuing
+	filesize = os.path.getsize(upload_filename)
+	min_filesize_bytes = int(variables['min_filesize_bytes'])
+	if filesize < min_filesize_bytes:
+		print ("file is under minimum file size")
+		print ("Filename:", upload_filename)
+		print ("filesize:",filesize)
+		print ("min filesize:",min_filesize_bytes)
+		exit(1)
+
 	print ("Initialising queue monitor class")
 	queue_monitor = main()
 	queue_monitor.db_host = variables['database_host']
@@ -50,5 +64,5 @@ if __name__ == "__main__":
 	queue_monitor.Initialise_DB()
 	
 	print ("Adding Entry to DB")
-	queue_monitor.filename = sys.argv[1]
+	queue_monitor.filename = upload_filename
 	queue_monitor.add_to_queue()

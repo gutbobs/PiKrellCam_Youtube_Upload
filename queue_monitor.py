@@ -51,6 +51,7 @@ class main:
 			else:
 				print ("upload failed")
 				print (cmd_result)
+			sql_cmd = "UPDATE VideoData set UPLOADRESULT='{cmd_res}' where INDEX='{index}';".format(cmd_res=cmd_result[0],index=item['INDEX'])
 		
 		
 		

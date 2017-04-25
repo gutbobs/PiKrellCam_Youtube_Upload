@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: localhost:3306
--- Generation Time: Apr 24, 2017 at 08:32 PM
+-- Generation Time: Apr 25, 2017 at 04:20 PM
 -- Server version: 5.7.17-0ubuntu0.16.04.1
 -- PHP Version: 7.0.15-0ubuntu0.16.04.4
 
@@ -25,9 +25,6 @@ SET time_zone = "+00:00";
 --
 -- Table structure for table `VideoData`
 --
--- Creation: Apr 23, 2017 at 03:11 PM
--- Last update: Apr 24, 2017 at 07:30 PM
---
 
 CREATE TABLE `VideoData` (
   `INDEX` int(11) NOT NULL,
@@ -35,7 +32,8 @@ CREATE TABLE `VideoData` (
   `VIDEONAME` varchar(500) NOT NULL,
   `CAMERAID` varchar(25) NOT NULL,
   `UPLOADED` tinyint(1) NOT NULL,
-  `UPLOADATTEMPTS` int(11) NOT NULL DEFAULT '0'
+  `UPLOADATTEMPTS` int(11) NOT NULL DEFAULT '0',
+  `UPLOADRESULT` varchar(1000) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
