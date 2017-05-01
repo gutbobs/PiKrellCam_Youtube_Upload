@@ -17,3 +17,9 @@ queue_monitor.service = lives in /lib/systemd/system and defines the queue monit
 queue_monitor.py = lives in /opt/youtube_uploader and monitors the database for new entries and then calls upload_video.py to send the videos to youtube
 
 upload_video.py = googles example code for uploading videos to youtube via their API. basically as found here: https://developers.google.com/youtube/v3/guides/uploading_a_video but with the addition of some additional exit codes. Note that you'll need all your own API keys etc
+
+my_uploads.py = get's a list of video IDs and titles from your "uploads" playlist. Pipe this into a text file and then run it through bulk_delete.py to remove videos that are older than 60 days
+
+bulk_delete = reads the contents of the output from myuploads.py and creates a new text file, which only contains videos over 60 days old. Because the uploader always puts the date and time as the title of the video, it's possible to retain a video just by renaming it
+
+del_video.py = deletes either individual videos (with the --id argument) or can use a csv file containing video IDs (--idlist)
