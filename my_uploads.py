@@ -93,5 +93,3 @@ for channel in channels_response["items"]:
     playlistitems_list_request = youtube.playlistItems().list_next(
       playlistitems_list_request, playlistitems_list_response)
 
-  print
-my_uploads.py
