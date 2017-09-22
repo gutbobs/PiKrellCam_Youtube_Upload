@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import time
 import subprocess
 import urllib.parse
@@ -31,29 +32,36 @@ class main:
 		#print (sql_cmd)
 		result = self.DB.Query(sql_cmd)
 		#print (len(result))
+		#print (result)
 		for item in result:
-			print (item['VIDEONAME'])
+			#print (item['VIDEONAME'])
 			filename = item['VIDEONAME']
 			title = filename.split('/')[-1]
 			description = time.ctime()
 			
+			if not os.path.exists(filename): 
+				print ("%s: file not found" % filename)
+				sql_cmd = "UPDATE `VideoData` set `UPLOADED`='2',`UPLOADRESULT`='not found' where `INDEX`='{index}';".format(index=item['INDEX'])
+				self.DB.Update(sql_cmd)
+				continue
+
 			cmd_line = 'sudo python /opt/youtube_uploader/upload_video.py --file="%s" --title="%s" --description="%s" --privacyStatus="private"' % (filename,title,description)
 			p = subprocess.Popen(cmd_line,shell=True,stdout=subprocess.PIPE)
 			cmd_result = p.communicate()
-			print (cmd_result)
-			print (p.returncode)
+			#print (cmd_result)
+			#print (p.returncode)
 			if (p.returncode == 0):
 				sql_cmd = """UPDATE `VideoData`
 				set `UPLOADED`='1', `UPLOADATTEMPTS`='%s'
 				where `INDEX`='%s';""" % (1,item['INDEX'])
-				print (sql_cmd)
+				#print (sql_cmd)
 				db_update_result = self.DB.Update(sql_cmd)
-				print (db_update_result)
+				#print (db_update_result)
 			else:
 				print ("upload failed")
 				print (cmd_result)
 			sql_cmd = "UPDATE `VideoData` set `UPLOADRESULT`='{cmd_res}',`UPLOADED`='1' where `INDEX`='{index}' ;".format(cmd_res=urllib.parse.quote_plus(cmd_result[0]),index=item['INDEX'])
-			print (sql_cmd)
+			#print (sql_cmd)
 			self.DB.Update(sql_cmd)
 
 		
@@ -76,6 +84,9 @@ if __name__ == "__main__":
 	loop_count = 0
 	while 1:
 		loop_count += 1
-		queue_monitor.check_queue()
-		time.sleep(int(queue_monitor.loop_time))
-		print (loop_count)
+		try:
+			queue_monitor.check_queue()
+			time.sleep(int(queue_monitor.loop_time))
+		except:
+			time.sleep(10)
+		#print (loop_count)
